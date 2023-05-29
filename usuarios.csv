@@ -1,1 +1,3 @@
-Id usuario, Nombre usuario, Contraseña, Cantidad apostada hasta el momento, Fecha ultima apuesta(YYYY/MM/DD), Dinero disponible
+mail, Nombre usuario, Contrasenia, Cantidad apostada hasta el momento, Fecha ultima apuesta(YYYY/MM/DD), Dinero disponible
+02balella@gmail.com,juan15,$pbkdf2-sha256$29000$h3DuXSvFuLcWYgwBQMgZQw$RkXC5O.4YS08JKl/Dtim77oNyL7fzUExpUm0cofJD7I,0.0,,0.0
+messi@gamil.com,juan,$pbkdf2-sha256$29000$vhcC4LyXUipF6B3jnBMCQA$Iq9V8.tmtMUaa4SZOgaYtytX513B2oNaBOY1e7dP0HU,0.0,,0.0
