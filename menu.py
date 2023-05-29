@@ -1,7 +1,3 @@
-# Mostrar el usuario que más dinero apostó.
-# 8. Mostrar el usuario que más veces ganó.
-
-
 def menu():
     OPCIONES = ('Mostrar plantel',
                 'Mostrar tabla de posiciones',
@@ -47,7 +43,3 @@ def menu():
             print(f'{i+1}- {OPCIONES[i]}')
         opcion = input('Elija una opcion: ')
     
-
-def main():
-    menu()
-main()
