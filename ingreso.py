@@ -21,7 +21,6 @@ def ingreso_usuario():
         lista_usuario=[]
         datos = [usuario.splitlines() for usuario in usuarios][1:]
         for i in range(len(datos)):
-            
             partes = datos[i][0].split(',')
             partes=partes[:2]
             datos_usuario.append(partes)
@@ -31,7 +30,8 @@ def ingreso_usuario():
         nombre_usuario =input('El usuario que acabas de escribir no existe ')
     contrasena = input('Ingresa tu contraseña: ')
     contrasena=verificar_constrasenia(nombre_usuario,contrasena)
-    print(contrasena)
+    menu.menu()
+    
     
 def verificar_constrasenia(nombre_usuario,contrasenia):
     lista_usuarios=[]
@@ -43,7 +43,6 @@ def verificar_constrasenia(nombre_usuario,contrasenia):
         for linea in lector_csv:
             if contador_de_iteracion <=1:
                 contador_de_iteracion=contador_de_iteracion+1
-            
             else:
                 lista_contrasenias.append(linea[2])
                 lista_usuarios.append(linea[1])
@@ -51,20 +50,9 @@ def verificar_constrasenia(nombre_usuario,contrasenia):
     for i in range(len(lista_usuarios)):
         if nombre_usuario == lista_usuarios[i]:
             while not pbkdf2_sha256.verify(contrasenia, lista_contrasenias[i]):
-                contrasenia=input("Error, esta no es la contrasenia correcta, intentelo otra vez")
+                contrasenia=input("Error, esta no es la contrasenia correcta, intentelo otra vez: ")
             if  pbkdf2_sha256.verify(contrasenia, lista_contrasenias[i]):
                 return contrasenia
-                
-                
-                
-                
-                
-
-            
-    
-    
-
-    
 
 def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
     datos_usuario = []
@@ -80,7 +68,6 @@ def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
         
     while usuario_o_mail in lista_usuario_o_mail:
         usuario_o_mail = input(f'Este {string} ya está ocupado, escribe otro: ')
-       
     return usuario_o_mail
 
 def registro_usuario():
@@ -96,14 +83,8 @@ def registro_usuario():
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow([email, nombre_usuario, hash_contrasena, 0.0, None, 0.0])
     menu.menu()
-    
-    
-    
 
 def main():
-    
-    
-    
     menu_bienvenida()
 main()
 
