@@ -25,7 +25,12 @@ def menu():
         elif opcion =='4':
             pass
         elif opcion =='5':
-            
+            numero = None
+            while numero is None:
+                try :
+                    numero = float(input('Ingresa el monto que deseas depositar: '))
+                except ValueError:
+                    print('El monto ingresado no es valido. Intenta de nuevo.')
             buscar_usuarios.cargar_dinero()
         elif opcion =='6':
             pass
