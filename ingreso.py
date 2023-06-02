@@ -1,6 +1,6 @@
 import csv
 from passlib.hash import pbkdf2_sha256
-import menu
+
 
 def menu_bienvenida():
     print('BIENVENIDO')
@@ -27,10 +27,10 @@ def ingreso_usuario():
     for i in range(len(datos_usuario)):
         lista_usuario.append(datos_usuario[i][1])
     while nombre_usuario not in lista_usuario:
-        nombre_usuario =input('El usuario que acabas de escribir no existe ')
+        nombre_usuario =input('El usuario que acabas de escribir no existe: ')
     contrasena = input('Ingresa tu contraseña: ')
     contrasena=verificar_constrasenia(nombre_usuario,contrasena)
-    menu.menu()
+    # menu.menu()
     
     
 def verificar_constrasenia(nombre_usuario,contrasenia):
@@ -82,11 +82,11 @@ def registro_usuario():
     with open("usuarios.csv", 'a', newline='') as usuarios:
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow([email, nombre_usuario, hash_contrasena, 0.0, None, 0.0])
-    menu.menu()
+# menu.menu()    
 
-def main():
-    menu_bienvenida()
-main()
+# def main():
+#     menu_bienvenida()
+# main()
 
 
 # from passlib.hash import pbkdf2_sha256

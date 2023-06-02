@@ -1,3 +1,5 @@
+import ingreso, buscar_usuarios
+
 def menu():
     OPCIONES = ('Mostrar plantel',
                 'Mostrar tabla de posiciones',
@@ -23,7 +25,8 @@ def menu():
         elif opcion =='4':
             pass
         elif opcion =='5':
-            pass
+            
+            buscar_usuarios.cargar_dinero()
         elif opcion =='6':
             pass
         elif opcion =='7':
@@ -43,3 +46,8 @@ def menu():
             print(f'{i+1}- {OPCIONES[i]}')
         opcion = input('Elija una opcion: ')
     
+
+def main():
+    ingreso.menu_bienvenida()
+    menu()
+main()
