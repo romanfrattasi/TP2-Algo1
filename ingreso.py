@@ -17,7 +17,6 @@ def menu_bienvenida():
     return nombre_usuario
 
 
-
 #PRE:
 #POST:
 def ingreso_usuario():

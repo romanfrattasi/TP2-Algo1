@@ -1,6 +1,7 @@
 import ingreso, buscar_usuarios
 
 def menu():
+    nombre_usuario = ingreso.menu_bienvenida()
     OPCIONES = ('Mostrar plantel',
                 'Mostrar tabla de posiciones',
                 'Mostrar informacion de un equipo',
@@ -31,7 +32,7 @@ def menu():
                     numero = float(input('Ingresa el monto que deseas depositar: '))
                 except ValueError:
                     print('El monto ingresado no es valido. Intenta de nuevo.')
-            buscar_usuarios.cargar_dinero()
+            buscar_usuarios.cargar_dinero(numero, nombre_usuario)
         elif opcion =='6':
             pass
         elif opcion =='7':
@@ -53,7 +54,5 @@ def menu():
     
 
 def main():
-    nombre_usuario = ingreso.menu_bienvenida()
-    print(nombre_usuario)
     menu()
 main()
