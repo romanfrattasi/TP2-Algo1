@@ -24,6 +24,7 @@ def cargar_dinero(monto: int, nombre_usuario: str):
 def usuario_mas_apostador():
     pass
     print()
+    print()
 
 def usuario_mas_ganador():
     pass
