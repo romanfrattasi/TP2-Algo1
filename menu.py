@@ -48,6 +48,7 @@ def menu():
     
 
 def main():
-    ingreso.menu_bienvenida()
+    nombre_usuario = ingreso.menu_bienvenida()
+    print(nombre_usuario)
     menu()
 main()

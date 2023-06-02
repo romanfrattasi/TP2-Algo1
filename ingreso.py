@@ -11,9 +11,12 @@ def menu_bienvenida():
         if opcion != '0' and opcion != '1':
             print("Opción inválida. Intenta nuevamente.")
     if opcion == '0':
-        ingreso_usuario()
+        nombre_usuario = ingreso_usuario()
     elif opcion == '1':
-        registro_usuario()
+        nombre_usuario = registro_usuario()
+    return nombre_usuario
+
+
 
 #PRE:
 #POST:
@@ -33,8 +36,7 @@ def ingreso_usuario():
         nombre_usuario =input('El usuario que acabas de escribir no existe: ')
     contrasena = input('Ingresa tu contraseña: ')
     contrasena=verificar_constrasenia(nombre_usuario,contrasena)
-    # menu.menu()
-    
+    return nombre_usuario
 
 #PRE:
 #POST:
@@ -60,7 +62,7 @@ def verificar_constrasenia(nombre_usuario,contrasenia):
                 return contrasenia
 
 #PRE:
-#POST
+#POST:
 def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
     datos_usuario = []
     with open("usuarios.csv", 'r', newline='') as usuarios:
@@ -89,3 +91,4 @@ def registro_usuario():
     with open("usuarios.csv", 'a', newline='') as usuarios:
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow([email, nombre_usuario, hash_contrasena, 0.0, None, 0.0])
+    return nombre_usuario
