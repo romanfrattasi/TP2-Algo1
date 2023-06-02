@@ -1,8 +1,8 @@
 import requests
-url = "https://api-football-v1.p.rapidapi.com/v2/teams/league/128"
+url = "https://api-football-v1.p.rapidapi.com/v3/teams/league/128"
 headers = {
-    'x-rapidapi-host': "api-football-v1.p.rapidapi.com",
-    'x-rapidapi-key': "ea4550b62906e6b4a627ad666d52394f"
+    'x-apisports-host': "v3.football.api-sports.io",
+    'x-apisports-key': "09d1ab5e3cf7f087a82915004a769d76"
     }
 response = requests.request("GET", url, headers=headers)
 print(response.text)

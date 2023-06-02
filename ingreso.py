@@ -1,7 +1,8 @@
 import csv
 from passlib.hash import pbkdf2_sha256
 
-
+#PRE:
+#POST:
 def menu_bienvenida():
     print('BIENVENIDO')
     opcion = ''
@@ -14,6 +15,8 @@ def menu_bienvenida():
     elif opcion == '1':
         registro_usuario()
 
+#PRE:
+#POST:
 def ingreso_usuario():
     nombre_usuario = input('Ingresa tu nombre de usuario: ')
     datos_usuario=[]
@@ -32,7 +35,9 @@ def ingreso_usuario():
     contrasena=verificar_constrasenia(nombre_usuario,contrasena)
     # menu.menu()
     
-    
+
+#PRE:
+#POST:
 def verificar_constrasenia(nombre_usuario,contrasenia):
     lista_usuarios=[]
     lista_contrasenias=[]
@@ -54,6 +59,8 @@ def verificar_constrasenia(nombre_usuario,contrasenia):
             if  pbkdf2_sha256.verify(contrasenia, lista_contrasenias[i]):
                 return contrasenia
 
+#PRE:
+#POST
 def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
     datos_usuario = []
     with open("usuarios.csv", 'r', newline='') as usuarios:
@@ -70,26 +77,15 @@ def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
         usuario_o_mail = input(f'Este {string} ya está ocupado, escribe otro: ')
     return usuario_o_mail
 
+#PRE:
+#POST:
 def registro_usuario():
     email = input('Ingresa tu email: ')
     email = verificar_usuario_o_mail(email, 0, "email")  
     nombre_usuario = input('Ingresa tu nombre de usuario: ')
     nombre_usuario = verificar_usuario_o_mail(nombre_usuario, 1, "nombre de usuario")  
-
-    
     contrasena = input('Ingresa tu contraseña: ')
     hash_contrasena = pbkdf2_sha256.hash(contrasena)
     with open("usuarios.csv", 'a', newline='') as usuarios:
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow([email, nombre_usuario, hash_contrasena, 0.0, None, 0.0])
-# menu.menu()    
-
-# def main():
-#     menu_bienvenida()
-# main()
-
-
-# from passlib.hash import pbkdf2_sha256
-# contraseña = 'x'
-# hash = pbkdf2_sha256.hash(contraseña)
-# print(pbkdf2_sha256.verify('puto', hash))
