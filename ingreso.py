@@ -3,7 +3,7 @@ from passlib.hash import pbkdf2_sha256
 
 #PRE:
 #POST:
-def menu_bienvenida():
+def menu_bienvenida()->str:
     print('BIENVENIDO')
     opcion = ''
     while opcion != '0' and opcion != '1':
@@ -19,7 +19,7 @@ def menu_bienvenida():
 
 #PRE:
 #POST:
-def ingreso_usuario():
+def ingreso_usuario()->str:
     nombre_usuario = input('Ingresa tu nombre de usuario: ')
     datos_usuario=[]
     with open("usuarios.csv", 'r', newline='') as usuarios:
@@ -39,7 +39,7 @@ def ingreso_usuario():
 
 #PRE:
 #POST:
-def verificar_constrasenia(nombre_usuario,contrasenia):
+def verificar_constrasenia(nombre_usuario,contrasenia)->str:
     lista_usuarios=[]
     lista_contrasenias=[]
     contador_de_iteracion=0
@@ -62,7 +62,7 @@ def verificar_constrasenia(nombre_usuario,contrasenia):
 
 #PRE:
 #POST:
-def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
+def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string)->str:
     datos_usuario = []
     with open("usuarios.csv", 'r', newline='') as usuarios:
         lista_usuario_o_mail = []
@@ -80,7 +80,7 @@ def verificar_usuario_o_mail(usuario_o_mail, posicion_en_archivo, string):
 
 #PRE:
 #POST:
-def registro_usuario():
+def registro_usuario()->str:
     email = input('Ingresa tu email: ')
     email = verificar_usuario_o_mail(email, 0, "email")  
     nombre_usuario = input('Ingresa tu nombre de usuario: ')

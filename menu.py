@@ -9,6 +9,7 @@ def menu():
                 'Cargar dinero',
                 'Mostrar el usuario que mas dinero aposto',
                 'Mostrar el usuario que mas veces gano',
+                'Apostar',
                 'Salir'
                 )
     
@@ -16,7 +17,7 @@ def menu():
         print(f'{i+1}- {OPCIONES[i]}')
     opcion = input('Elija una opcion: ')
     
-    while opcion != '8':
+    while opcion != '9':
         if opcion == '1':
             pass
         elif opcion =='2':
@@ -26,16 +27,18 @@ def menu():
         elif opcion =='4':
             pass
         elif opcion =='5':
-            numero = None
-            while numero is None:
+            monto = None
+            while monto is None:
                 try :
-                    numero = float(input('Ingresa el monto que deseas depositar: '))
+                    monto = float(input('Ingresa el monto que deseas depositar: '))
                 except ValueError:
                     print('El monto ingresado no es valido. Intenta de nuevo.')
-            buscar_usuarios.cargar_dinero(numero, nombre_usuario)
+            buscar_usuarios.cargar_dinero(monto, nombre_usuario)
         elif opcion =='6':
-            pass
+            buscar_usuarios.usuario_mas_apostador()
         elif opcion =='7':
+            pass
+        elif opcion =='8':
             pass
         else:
             print('Opcion incorrecta. Intente otra vez')
@@ -46,6 +49,7 @@ def menu():
                 'Cargar dinero',
                 'Mostrar el usuario que mas dinero aposto',
                 'Mostrar el usuario que mas veces gano',
+                'Apostar',
                 'Salir'
                 )
         for i in range(len(OPCIONES)):
