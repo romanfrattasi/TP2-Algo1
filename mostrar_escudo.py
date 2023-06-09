@@ -19,7 +19,6 @@ response = requests.get(url, headers=headers, params=payload)
 if response.status_code == 200:
     data = response.json()
     equipos = data['response']
-
     equipo_buscado = input("Ingrese el nombre del equipo del cual desea ver el escudo: ")
 
     for equipo in equipos:
@@ -32,9 +31,6 @@ if response.status_code == 200:
                 imagen_de_escudo.show()
             else:
                 print("Error al obtener el escudo:", response.status_code)
-            
-    else:
-        print("Equipo no encontrado.")
 
 else:
     print("Error en la solicitud de equipos:", response.status_code)
