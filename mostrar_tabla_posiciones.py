@@ -14,14 +14,16 @@ response = requests.get(url, headers=headers, params=payload)
 
 if response.status_code == 200:
     data = response.json()
-    equipos = data
-    print(equipos)
-    # for equipo in equipos:
-    #     posicion = equipo[0]['league']['standings']['rank']
-    #     nombre_equipo = equipo['league']['standings']['team']['name']
-    #     puntos = equipo['league']['standings']['points']
-        
-    #     print(f'{posicion}- {nombre_equipo} | {puntos}')
-    
+    if data['results'] > 0:
+        posiciones = data['response'][0]['league']['standings'][0]
+
+        print("Tabla de Posiciones:")
+        for posicion in posiciones:
+            nombre_equipo = posicion['team']['name']
+            posicon_equipo = posicion['rank']
+            puntos = posicion['points']
+            print(f'{posicon_equipo}- {nombre_equipo} | {puntos}')
+    else:
+        print("No se encontraron datos de la tabla de posiciones.")
 else:
-    print('Error en la solicitud:', response.status_code)
+    print("Error en la solicitud:", response.status_code)
