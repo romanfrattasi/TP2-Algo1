@@ -1,9 +1,17 @@
 import requests
 url = "https://v3.football.api-sports.io/standings"
 league_id = 128  # ID de la liga argentina
+
+temporada = None
+while temporada is None:
+    try:
+        temporada = int(input("Por favor ingrese la temporada: "))
+    except ValueError:
+        print("Ingreso erróneo. Intenta de nuevo.")
+
 payload = {
     "league": league_id,
-    "season": 2021
+    "season": temporada
 }
 
 headers = {
