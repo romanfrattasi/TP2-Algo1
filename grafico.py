@@ -1,7 +1,10 @@
 import requests
 import matplotlib.pyplot as plt
 
-equipo = 435
+ids_equipos=  {'Gimnasia L.P.': 434, 'River Plate': 435, 'Racing Club': 436, 'Rosario Central': 437, 'Velez Sarsfield': 438, 'Godoy Cruz': 439, 'Belgrano Cordoba': 440, 'Union Santa Fe': 441, 'Defensa Y Justicia': 442, 'Huracan': 445, 'Lanus': 446, 'Colon Santa Fe': 448, 'Banfield': 449, 'Estudiantes L.P.': 450, 'Boca Juniors': 451, 'Tigre': 452, 'Independiente': 453, 'Atletico Tucuman': 455, 'Talleres Cordoba': 456, 'Newells Old Boys': 457, 'Argentinos JRS': 458, 'Arsenal Sarandi': 459, 'San Lorenzo': 460, 'Sarmiento Junin': 474, 'Instituto Cordoba': 478, 'Platense': 1064, 'Central Cordoba de Santiago': 1065, 'Barracas Central': 2432}
+
+
+equipo = input("Escribe el equipo deseado: ")
 
 url = "https://v3.football.api-sports.io/teams/statistics"
 league_id = 128  # ID de la liga argentina
@@ -9,7 +12,7 @@ league_id = 128  # ID de la liga argentina
 payload = {
     "league": league_id,
     "season": 2023,
-    "team":equipo
+    "team":ids_equipos[equipo]
 }
 # llave de roman = d0b3d415d1b1ae06f1698e7fcb0a3943
 headers = {
@@ -21,48 +24,42 @@ response = requests.get(url, headers=headers, params=payload)
 
 if response.status_code == 200:
     data = response.json()
-    equipos = data['response']
+    equipos:dict = data['response']
     print(data)
-    equipo_buscado = input("Ingrese el nombre del equipo: ")
+    eje_y=equipos["goals"]["for"]["total"]["total"]
+    goles_por_minuto=[]
+    eje_x:int=["goals"]["for"]["minute"]["0-15"]["total"]
+    goles_por_minuto.append(eje_x)
+    print(f"eje y {eje_y}")
+    print(f"eje x {goles_por_minuto}")  
+    
 
-    equipo_id = None
-    for equipo in equipos:
-        nombre_equipo = equipo['team']['name']
-        if nombre_equipo.lower() == equipo_buscado.lower():
-            equipo_id = equipo['team']['id']
-            break
+   
 
-    if equipo_id:
-        player_url = f"https://v3.football.api-sports.io/players?team={equipo_id}&season=2023"
-        player_response = requests.get(player_url, headers=headers)
-
-        if player_response.status_code == 200:
-            players = player_response.json()['response']
-
-            goles_minutos = []
-            for player in players:
-                goles = player['statistics'][0]['goals']['total']
-                minutos = player['statistics'][0]['games']['minutes']
-                if goles is not None and minutos is not None:
-                    goles_minutos.append((goles, minutos))
-
-            goles_minutos.sort(key=lambda x: x[1])  # Ordenar por minutos jugados
-
-            goles = [x[0] for x in goles_minutos]
-            minutos = [x[1] for x in goles_minutos]
-
-            plt.plot(minutos, goles)
-            plt.xlabel("Minutos jugados")
-            plt.ylabel("Goles realizados")
-            plt.title(f"Goles vs. Minutos para el equipo {equipo_buscado} - Temporada 2023")
-
-            # Establecer los ticks en el eje x en incrementos de 10 minutos
-            plt.xticks(range(0, 91, 10))
-
-            plt.show()
-        else:
-            print("Error en la solicitud de jugadores:", player_response.status_code)
-    else:
-        print("Equipo no encontrado.")
+    
 else:
     print("Error en la solicitud de equipos:", response.status_code)
+    
+'''
+    data = response.json()
+    equipos = data['response']
+    if equipos:
+        eje_y = equipos[0]['statistics']['goals']['for']['total']
+        goles_por_minuto = []
+        intervalos = ['0-15', '16-30', '31-45', '46-60', '61-75', '76-90', '91-105']
+        for intervalo in intervalos:
+            goles = equipos[0]['statistics']['goals']['for']['minute'][intervalo]['total']
+            goles_por_minuto.append(goles)
+        print(f"eje y {eje_y}")
+        print(f"eje x {goles_por_minuto}")
+
+        # Crear gráfico de barras
+        plt.bar(intervalos, goles_por_minuto)
+        plt.xlabel("Intervalo de tiempo")
+        plt.ylabel("Goles")
+        plt.title("Goles por intervalo de tiempo")
+        plt.show()
+    else:
+        print("No se encontraron equipos en la respuesta")
+    
+'''
