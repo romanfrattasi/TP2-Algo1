@@ -7,7 +7,7 @@ headers = {
   'x-rapidapi-host': 'v3.football.api-sports.io'
 }
 
-response = requests.request("GET", url, headers=headers, data=payload)
+response = requests.get(url, headers=headers, params=payload)
 
 if response.status_code == 200:
     data = response.json()

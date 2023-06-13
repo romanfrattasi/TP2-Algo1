@@ -42,16 +42,16 @@ def menu():
             pass
         else:
             print('Opcion incorrecta. Intente otra vez')
-        OPCIONES = ('Mostrar plantel',
-                'Mostrar tabla de posiciones',
-                'Mostrar informacion de un equipo',
-                'Grafico goles/minutos',
-                'Cargar dinero',
-                'Mostrar el usuario que mas dinero aposto',
-                'Mostrar el usuario que mas veces gano',
-                'Apostar',
-                'Salir'
-                )
+        # OPCIONES = ('Mostrar plantel',
+        #         'Mostrar tabla de posiciones',
+        #         'Mostrar informacion de un equipo',
+        #         'Grafico goles/minutos',
+        #         'Cargar dinero',
+        #         'Mostrar el usuario que mas dinero aposto',
+        #         'Mostrar el usuario que mas veces gano',
+        #         'Apostar',
+        #         'Salir'
+        #         )
         for i in range(len(OPCIONES)):
             print(f'{i+1}- {OPCIONES[i]}')
         opcion = input('Elija una opcion: ')
