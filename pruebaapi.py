@@ -1,7 +1,10 @@
 import requests
-url = "https://v3.football.api-sports.io/teams?league=128&season=2023"
+url = "https://v3.football.api-sports.io/teams"
 
-payload={}
+payload={
+    "league": 128,
+    "season": 2023
+}
 headers = {
   'x-rapidapi-key': 'd0b3d415d1b1ae06f1698e7fcb0a3943',
   'x-rapidapi-host': 'v3.football.api-sports.io'
