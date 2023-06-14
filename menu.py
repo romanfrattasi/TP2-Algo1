@@ -1,6 +1,7 @@
 import ingreso, buscar_usuarios
 
 def menu():
+    
     nombre_usuario = ingreso.menu_bienvenida()
     OPCIONES = ('Mostrar plantel',
                 'Mostrar tabla de posiciones',
