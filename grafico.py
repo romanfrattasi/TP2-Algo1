@@ -30,12 +30,14 @@ ids_equipos=  {'Gimnasia L.P.': 434,
                'Central Cordoba de Santiago': 1065,
                'Barracas Central': 2432}
 
-equipo = input("Escribe el equipo deseado: ")
-parametros = {
-    "league": 128,
-    "season": 2023,
-    "team":ids_equipos[equipo]
-}
+
+for equipo in ids_equipos.keys():
+    print(f"{equipo}")
+
+equipo = input("Escribe el equipo deseado: ").title()
+while equipo not in ids_equipos:
+    equipo = input("El equipo no es correcto, intente nuevamente: ").title()
+
 url = "https://v3.football.api-sports.io/teams/statistics"
 league_id = 128  # ID de la liga argentina
 
