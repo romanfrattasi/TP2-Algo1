@@ -32,7 +32,7 @@ ids_equipos=  {'Gimnasia L.P.': 434,
 
 #PRE:
 #POST: Devuelve el equipo elegido por el usuario.
-def pedir_equipo() -> str:
+def pedir_equipo(ids_equipos: dict) -> str:
     for equipo in ids_equipos.keys():
         print(f"{equipo}")
     equipo = input("Escribe el equipo deseado: ").title()
@@ -72,5 +72,7 @@ def imprimir_grafico() -> None:
         plt.show()
     else:
         print("Error en la solicitud de equipos:", response.status_code)
+        
+
 imprimir_grafico()
 
