@@ -47,7 +47,7 @@ def llamado_api():
     payload = {
         "league": league_id,
         "season": 2023,
-        "team":ids_equipos[pedir_equipo()]
+        "team":ids_equipos[pedir_equipo(ids_equipos)]
     }
 
     headers = {
