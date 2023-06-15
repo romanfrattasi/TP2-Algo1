@@ -26,9 +26,9 @@ if response.status_code == 200:
         if local == equipo_deseado:
             partido= str((f"{local} vs {visitante}"))
             lista_partidos.append(partido)
-        elif visitante == equipo_deseado:
-            partido= str((f"{local} vs {visitante}"))
-            lista_partidos.append(partido)
+        #elif visitante == equipo_deseado:
+        #    partido= str((f"{local} vs {visitante}"))
+        #    lista_partidos.append(partido)
     for i in range(len(lista_partidos)):
         print(f"{i+1}) {lista_partidos[i]}")
     posicion_partido_deseado=int((input("escoge el numero del partido a apostar: ")))-1

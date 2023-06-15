@@ -3,6 +3,8 @@
 # Mostrar el usuario que más veces ganó.
 import csv
 
+#PRE: El archivo indicado no debe estar vacío.
+#POST: Devuelve una lista con todos los datos de los usuarios presentes en el archivo.
 def obtener_datos_de_los_usuarios(ruta_archivo:str)->list:
     todos_los_usuarios=[]
     with open(ruta_archivo, 'r', newline='') as usuarios:
@@ -15,6 +17,8 @@ def obtener_datos_de_los_usuarios(ruta_archivo:str)->list:
         datos_de_cada_usuario.append(todos_los_usuarios[i][1])
     return todos_los_usuarios
 
+#PRE: Se recibe un nombre de usuario y el monto a depositar.
+#POST: Actualiza el dinero disponible del usuario en el archivo.
 def cargar_dinero(monto: int, nombre_usuario: str)->None:
     todos_los_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     for usuario in todos_los_usuarios:
@@ -25,6 +29,8 @@ def cargar_dinero(monto: int, nombre_usuario: str)->None:
         escritor_csv.writerow(["mail", "Nombre usuario", "Contrasenia", "Cantidad apostada hasta el momento", "Fecha ultima apuesta(YYYY/MM/DD)", "Dinero disponible"])
         escritor_csv.writerows(todos_los_usuarios)
 
+#PRE:
+#POST: Muestra por pantalla el usuario que mas dinero apostó.
 def usuario_mas_apostador()->None:
     todos_los_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     usuarios_y_montos = [[usuario[1],usuario[3]] for usuario in todos_los_usuarios]
@@ -32,5 +38,7 @@ def usuario_mas_apostador()->None:
     
     print(f'El usuario que mas dinero aposto es {usuarios_y_montos[0][0]} con ${usuarios_y_montos[0][1]}')
 
+#PRE:
+#POST:
 def usuario_mas_ganador():
     pass

@@ -29,5 +29,4 @@ else:
     print('Error en la solicitud:', response.status_code)
 
 
-#print(response.text)
 
