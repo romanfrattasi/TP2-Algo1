@@ -7,6 +7,12 @@ payload = {
     'league':128,
     'season':2023
 }
+
+HEADERS = {
+        "x-rapidapi-key": "09d1ab5e3cf7f087a82915004a769d76",
+        "x-rapidapi-host": "v3.football.api-sports.io"
+    }
+
 ids_equipos=  {'Gimnasia L.P.': 434,
                'River Plate': 435,
                'Racing Club': 436,
@@ -38,11 +44,7 @@ ids_equipos=  {'Gimnasia L.P.': 434,
 
 #PRE:
 #POST:
-def llamado_api(url: str, payload: dict):
-    headers = {
-        "x-rapidapi-key": "09d1ab5e3cf7f087a82915004a769d76",
-        "x-rapidapi-host": "v3.football.api-sports.io"
-    }
+def llamado_api(url: str, payload: dict, headers: dict):
     response = requests.get(url, headers=headers, params=payload)
     return response
 
@@ -51,7 +53,7 @@ def llamado_api(url: str, payload: dict):
 def pedir_equipo(ids_equipos: dict) -> str:
     for equipo in ids_equipos.keys():
         print(f"{equipo}")
-    equipo = input("Escribe el equipo deseado: ").title()
+    equipo = input("Escriba el equipo deseado: ").title()
     while equipo not in ids_equipos:
         equipo = input("El equipo no es correcto, intente nuevamente: ").title()
     return equipo
@@ -67,26 +69,26 @@ def modificar_payload(equipo: str, payload: dict) ->dict:
 def imprimir_grafico(ids_equipos: dict, payload: dict) -> None:
     equipo_deseado = pedir_equipo(ids_equipos)
     payload = modificar_payload(equipo_deseado, payload)
-    response = llamado_api("https://v3.football.api-sports.io/teams/statistics", payload)
+    response = llamado_api("https://v3.football.api-sports.io/teams/statistics", payload, HEADERS)
     if response.status_code == 200:
         data = response.json()
         equipos:dict = data['response']
         eje_X = ['0-15', '16-30', '31-45', '46-60', '61-75', '76-90', '91-105', '106-120']
         eje_Y = [equipos["goals"]["for"]["minute"][minutos]["total"] for minutos in eje_X]
-        
         plt.plot(eje_X, eje_Y)
         plt.show()
     else:
         print("Error en la solicitud de equipos:", response.status_code)
+    del payload["team"]
 
 #PRE:
 #POST:
-def mostrar_escudo_e_informacion(payload: dict) ->None:
-    response = llamado_api("https://v3.football.api-sports.io/teams", payload)
+def mostrar_escudo_e_informacion(payload: dict, ids_equipos: dict) ->None:
+    response = llamado_api("https://v3.football.api-sports.io/teams", payload, HEADERS)
     if response.status_code == 200:
         data = response.json()
         equipos = data['response']
-        equipo_buscado = input("Ingrese el nombre del equipo del cual desea ver el escudo: ").lower()
+        equipo_buscado = pedir_equipo(ids_equipos)
         for equipo in equipos:
             cancha = equipo['venue']['name']
             ciudad_cancha = equipo['venue']['city']
@@ -118,12 +120,12 @@ def pedir_temporada() ->int:
 
 #PRE:
 #POST:
-def mostrar_tabla_de_posiciones():
+def mostrar_tabla_de_posiciones() ->None:
     payload_de_posiciones = {
     "league": 128,
     "season": pedir_temporada()
     }
-    response = llamado_api("https://v3.football.api-sports.io/standings", payload_de_posiciones)
+    response = llamado_api("https://v3.football.api-sports.io/standings", payload_de_posiciones, HEADERS)
     if response.status_code == 200:
         data = response.json()
         if data['results'] > 0:
@@ -138,3 +140,31 @@ def mostrar_tabla_de_posiciones():
             print("No se encontraron datos de la tabla de posiciones.")
     else:
         print("Error en la solicitud:", response.status_code)
+
+#PRE:
+#POST:
+def mostrar_jugadores(payload: dict, headers: dict, ids_equipos: dict) ->None:
+    response = llamado_api("https://v3.football.api-sports.io/teams", payload, HEADERS)
+    if response.status_code == 200:
+        data = response.json()
+        equipos = data['response']
+        equipo_buscado = pedir_equipo(ids_equipos)
+        for equipo in equipos:
+            nombre_equipo = equipo['team']['name']
+            equipo_id = equipo['team']['id']
+            if nombre_equipo == equipo_buscado:
+                payload_jugador = {"team": equipo_id, "season": 2023}
+                print(f"Equipo: {nombre_equipo}")
+                print("Jugadores:")
+                url_jugador = "https://v3.football.api-sports.io/players"
+                response_jugador = requests.get(url_jugador, headers=headers, params=payload_jugador)
+                if response_jugador.status_code == 200:
+                    jugadores = response_jugador.json()['response']
+                    for jugador in jugadores:
+                        nombre_jugador = jugador['player']['name']
+                        posicion = jugador['statistics'][0]['games']['position']
+                        print(f"- {nombre_jugador} ({posicion})")
+                else:
+                    print("Error en la solicitud de jugadores:", response_jugador.status_code)
+    else:
+        print("Error en la solicitud de equipos:", response.status_code)
