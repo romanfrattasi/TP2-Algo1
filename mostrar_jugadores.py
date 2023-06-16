@@ -7,7 +7,7 @@ payload = {
 }
 
 headers = {
-    "x-rapidapi-key": "d0b3d415d1b1ae06f1698e7fcb0a3943",
+    "x-rapidapi-key": "09d1ab5e3cf7f087a82915004a769d76",
     "x-rapidapi-host": "v3.football.api-sports.io"
 }
 response = requests.get(url, headers=headers, params=payload)
@@ -27,19 +27,19 @@ if response.status_code == 200:
         if nombre_equipo.lower() == equipo_buscado.lower():
             print(f"Equipo: {nombre_equipo}")
             print("Jugadores:")
-            player_url = "https://v3.football.api-sports.io/players"
-            player_payload = {
+            url_jugador = "https://v3.football.api-sports.io/players"
+            payload_jugador = {
                 "team": equipo_id,
                 "season": 2023
             }
-            player_response = requests.get(player_url, headers=headers, params=player_payload)
-            if player_response.status_code == 200:
-                players = player_response.json()['response']
-                for player in players:
-                    nombre_jugador = player['player']['name']
-                    posicion = player['statistics'][0]['games']['position']
+            response_jugador = requests.get(url_jugador, headers=headers, params=payload_jugador)
+            if response_jugador.status_code == 200:
+                jugadores = response_jugador.json()['response']
+                for jugador in jugadores:
+                    nombre_jugador = jugador['player']['name']
+                    posicion = jugador['statistics'][0]['games']['position']
                     print(f"- {nombre_jugador} ({posicion})")
             else:
-                print("Error en la solicitud de jugadores:", player_response.status_code)
+                print("Error en la solicitud de jugadores:", response_jugador.status_code)
 else:
     print("Error en la solicitud de equipos:", response.status_code)
