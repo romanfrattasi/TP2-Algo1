@@ -1,4 +1,5 @@
 import requests
+from random import randint
 
 url = "https://v3.football.api-sports.io/fixtures"
 league_id = 128
@@ -45,10 +46,11 @@ if response.status_code == 200:
         if response_nuevo.status_code==200:
             data = response_nuevo.json()
             fixtures = data['response']
-            
+            dado=randint(1,4)
             equipo_que_deaseas_apostar=input("escribe el equipo que deseas apostar: ").title()
             gano_o_pierdo=fixtures[0]["predictions"]["win_or_draw"]
             print(gano_o_pierdo)
+            
         
             #teniendo el partido, hay que entrar a fiixture y encontrar el id del partido y buscarla en el endpoint de predictons,
         
