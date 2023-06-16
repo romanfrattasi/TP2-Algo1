@@ -15,7 +15,7 @@ payload = {
 }
 
 headers = {
-    "x-rapidapi-key": "d0b3d415d1b1ae06f1698e7fcb0a3943",
+    "x-rapidapi-key": "09d1ab5e3cf7f087a82915004a769d76",
     "x-rapidapi-host": "v3.football.api-sports.io"
 }
 response = requests.get(url, headers=headers, params=payload)
@@ -35,3 +35,5 @@ if response.status_code == 200:
         print("No se encontraron datos de la tabla de posiciones.")
 else:
     print("Error en la solicitud:", response.status_code)
+    
+##MODULARIZADO Y FUNCIONANDO EN LLAMADOS_A_LA_API
