@@ -114,6 +114,7 @@ def pedir_temporada() ->int:
     while temporada is None:
         try:
             temporada = int(input("Por favor ingrese la temporada: "))
+            
         except ValueError:
             print("Ingreso erróneo. Intenta de nuevo.")
     return temporada
@@ -128,8 +129,12 @@ def mostrar_tabla_de_posiciones() ->None:
     response = llamado_api("https://v3.football.api-sports.io/standings", payload_de_posiciones, HEADERS)
     if response.status_code == 200:
         data = response.json()
-        if data['results'] > 0:
-            posiciones = data['response'][0]['league']['standings'][0]
+        if data['results'] > 0: 
+            if payload_de_posiciones['season']==2023:   
+                posiciones = data['response'][0]['league']['standings'][1]
+            else:
+                posiciones= data['response'][0]['league']['standings'][0]
+            
             print("Tabla de Posiciones:")
             for posicion in posiciones:
                 nombre_equipo = posicion['team']['name']
@@ -168,3 +173,4 @@ def mostrar_jugadores(payload: dict, headers: dict, ids_equipos: dict) ->None:
                     print("Error en la solicitud de jugadores:", response_jugador.status_code)
     else:
         print("Error en la solicitud de equipos:", response.status_code)
+mostrar_tabla_de_posiciones()
