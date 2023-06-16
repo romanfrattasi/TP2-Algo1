@@ -1,5 +1,7 @@
 import requests
 import matplotlib.pyplot as plt
+from PIL import Image
+from io import BytesIO
 
 
 
@@ -58,15 +60,15 @@ def pedir_equipo(ids_equipos: dict) -> str:
         equipo = input("El equipo no es correcto, intente nuevamente: ").title()
     return equipo
 
-def modificar_payload(equipo):
+def modificar_payload(equipo: str, payload: dict) ->dict:
     payload.update({'team':ids_equipos[equipo]})
     return payload
 
 #PRE:
 #POST: Muestra un gráfico de los goles anotados de un equipo por minuto.
-def imprimir_grafico(ids_equipos: dict) -> None:
+def imprimir_grafico(ids_equipos: dict, payload: dict) -> None:
     equipo_deseado = pedir_equipo(ids_equipos)
-    payload = modificar_payload(equipo_deseado)
+    payload = modificar_payload(equipo_deseado, payload)
     response = llamado_api("https://v3.football.api-sports.io/teams/statistics", payload)
     if response.status_code == 200:
         data = response.json()
@@ -80,6 +82,31 @@ def imprimir_grafico(ids_equipos: dict) -> None:
         print("Error en la solicitud de equipos:", response.status_code)
         
 
+#PRE:
+#POST:
+def mostrar_escudo_e_informacion(payload: dict) ->None:
+    response = llamado_api("https://v3.football.api-sports.io/teams", payload)
+    if response.status_code == 200:
+        data = response.json()
+        equipos = data['response']
+        equipo_buscado = input("Ingrese el nombre del equipo del cual desea ver el escudo: ").lower()
+        for equipo in equipos:
+            cancha = equipo['venue']['name']
+            ciudad_cancha = equipo['venue']['city']
+            direccion_cancha = equipo['venue']['address']
+            capacidad = equipo['venue']['capacity']
+            nombre_equipo = equipo['team']['name']
+            escudo_url = equipo['team']['logo']
+            if nombre_equipo.lower() == equipo_buscado.lower():
+                response = requests.get(escudo_url)
+                if response.status_code == 200:
+                    print(f"El nombre del estadio del equipo {nombre_equipo} es: {cancha}, ubicado en la ciudad de {ciudad_cancha}, en la dirección {direccion_cancha}, el cual cuenta con una capacidad de {capacidad} espectadores.")
+                    imagen_de_escudo = Image.open(BytesIO(response.content))
+                    imagen_de_escudo.show()
+                else:
+                    print("Error al obtener el escudo:", response.status_code)
+    else:
+        print("Error en la solicitud de equipos:", response.status_code)
 
 
-imprimir_grafico(ids_equipos)
+mostrar_escudo_e_informacion(payload)

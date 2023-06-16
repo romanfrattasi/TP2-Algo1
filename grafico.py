@@ -76,3 +76,5 @@ def imprimir_grafico() -> None:
 
 imprimir_grafico()
 
+
+##MODULARIZADO Y FUNCIONANDO EN LLAMADOS_A_LA_API
