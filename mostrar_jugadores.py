@@ -43,3 +43,6 @@ if response.status_code == 200:
                 print("Error en la solicitud de jugadores:", response_jugador.status_code)
 else:
     print("Error en la solicitud de equipos:", response.status_code)
+
+##MODULARIZADO Y FUNCIONANDO EN LLAMADOS_A_LA_API
+
