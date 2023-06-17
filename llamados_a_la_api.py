@@ -176,7 +176,7 @@ def mostrar_jugadores(payload: dict, headers: dict, ids_equipos: dict) ->None:
     else:
         print("Error en la solicitud de equipos:", response.status_code)
 
-def calcular_ganador(equipo_que_deseas_apostar,equipo_local,equipo_visitante,posible_ganancia_alta,posible_ganancia_baja,posible_ganancia_empate,posible_ganador,posible_perdedor):
+def calcular_ganador(equipo_local,equipo_visitante):
     dado = randint(1,3)
     equipo_ganador = ''
     
@@ -187,6 +187,68 @@ def calcular_ganador(equipo_que_deseas_apostar,equipo_local,equipo_visitante,pos
     elif dado == 3:
         equipo_ganador = equipo_visitante
         
+    return equipo_ganador
+        
+def organizar_partidos_por_fecha(fixtures):
+    lista_partidos_por_fecha=[]
+    diccionario_id_partidos={}
+    for partido in fixtures:
+        local = partido["teams"]["home"]["name"]
+        visitante = partido["teams"]["away"]["name"]
+        id_partido=partido["fixture"]["id"]
+        partido_a_jugar=f"{local} vs {visitante}"
+        diccionario_id_partidos[partido_a_jugar]=id_partido
+        lista_partidos_por_fecha.append(partido_a_jugar)
+    return lista_partidos_por_fecha, diccionario_id_partidos
+    
+def mostrar_partidos_por_pantalla(lista_partidos_por_fecha):
+    for i in range(len(lista_partidos_por_fecha)):
+        print(f"{i+1}) {lista_partidos_por_fecha[i]}")
+
+def seleccion_partido(lista_partidos_por_fecha, diccionario_id_partidos):
+    op=int(input("Elije el numero del partido que quieres apostar: "))-1
+    print(f"Usted quiere apostar al partido de {lista_partidos_por_fecha[op]}")
+    id_del_partido_seleccionado=diccionario_id_partidos[lista_partidos_por_fecha[op]]
+    
+    return id_del_partido_seleccionado
+
+def buscar_posible_ganador(equipo_local, equipo_visitante, win_or_draw):
+    posible_ganador = equipo_local if win_or_draw else equipo_visitante #equipo que tiene win_or_draw = True
+    posible_perdedor = equipo_local if not win_or_draw else equipo_visitante #equipo que tiene win_or_draw = False
+    return posible_ganador, posible_perdedor
+
+def posibles_ganancias(posible_ganador, posible_perdedor, dinero_disponible):
+    coste_apuesta = randint(1,4)
+    apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
+    dinero_disponible -= apuesta
+    
+    posible_ganancia_alta = apuesta + (apuesta * coste_apuesta)
+    posible_ganancia_baja = apuesta + ((coste_apuesta/10)*apuesta)
+    posible_ganancia_empate = apuesta * 1.5
+    
+    print(f'Si el ganador es {posible_ganador} ganaras ${posible_ganancia_baja}')
+    print(f'Si el ganador es {posible_perdedor} ganaras ${posible_ganancia_alta}')
+    print(f'Si empatan ganaras ${posible_ganancia_empate}')
+    
+    return posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate, dinero_disponible
+    
+def apostar(fixtures):
+    dinero_disponible = 1000
+    equipo_local = fixtures[0]['teams']['home']['name']
+    equipo_visitante = fixtures[0]['teams']['away']['name']
+    win_or_draw = fixtures[0]["predictions"]["win_or_draw"]
+    posible_ganador, posible_perdedor = buscar_posible_ganador(equipo_local, equipo_visitante, win_or_draw)
+    
+    posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate, dinero_disponible = posibles_ganancias(posible_ganador, posible_perdedor, dinero_disponible)
+    
+    equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar (o Empate): ").title() 
+    
+    while equipo_que_deseas_apostar != equipo_local and equipo_que_deseas_apostar != equipo_visitante and equipo_que_deseas_apostar != 'Empate':
+        print('La opcion ingresada no es correcta')
+        equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar: ").title()
+    
+    equipo_ganador = calcular_ganador(equipo_local,equipo_visitante)
+    
     if equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == posible_ganador:
         print(f'Felicitaciones! Ganaste ${posible_ganancia_baja}')
         dinero_disponible += posible_ganancia_baja
@@ -198,8 +260,9 @@ def calcular_ganador(equipo_que_deseas_apostar,equipo_local,equipo_visitante,pos
         dinero_disponible += posible_ganancia_empate
     else:
         print('Perdiste!')
-        
-def apostar():
+
+
+def comenzar_sistema_apuestas():
     payload_fecha ={"league":"128",
           "season": "2023",
           "date":  '2023-06-12'}
@@ -208,67 +271,24 @@ def apostar():
     if response_fecha.status_code ==200:
         data = response_fecha.json()
         fixtures = data['response']
-        lista_partidos_por_fecha=[]
-        diccionario_id_partidos={}
         if fixtures:
+            lista_partidos_por_fecha, diccionario_id_partidos = organizar_partidos_por_fecha(fixtures)
+            mostrar_partidos_por_pantalla(lista_partidos_por_fecha)
+            id_del_partido_seleccionado = seleccion_partido(lista_partidos_por_fecha, diccionario_id_partidos)
             
-            for partido in fixtures:
-                local = partido["teams"]["home"]["name"]
-                visitante = partido["teams"]["away"]["name"]
-                id_partido=partido["fixture"]["id"]
-                partido_a_jugar=f"{local} vs {visitante}"
-                diccionario_id_partidos[partido_a_jugar]=id_partido
-                lista_partidos_por_fecha.append(partido_a_jugar)
-            
-            for i in range(len(lista_partidos_por_fecha)):
-                print(f"{i+1}) {lista_partidos_por_fecha[i]}")
-           
-            op=int(input("Elije el numero del partido que quieres apostar: "))-1
-            print(f"Usted quiere apostar al partido de {lista_partidos_por_fecha[op]}")
-            id_del_partido_seleccionado=diccionario_id_partidos[lista_partidos_por_fecha[op]]
-            print(id_del_partido_seleccionado)
             payload_predicciones={
                 "fixture":id_del_partido_seleccionado
-            }
+                }
+            
             nuevo_url="https://v3.football.api-sports.io/predictions"
-            response_nuevo = requests.get(nuevo_url, headers=HEADERS, params=payload_predicciones)
+            response_nuevo = llamado_api(nuevo_url, payload_predicciones, HEADERS)
             
             data = response_nuevo.json()
             fixtures = data['response']
-
-            #LA FUNCION APOSTAR TIENE QUE EMPEZAR ACA
-            equipo_local = fixtures[0]['teams']['home']['name']
-            equipo_visitante = fixtures[0]['teams']['away']['name']
-            win_or_draw = fixtures[0]["predictions"]["win_or_draw"]
-            posible_ganador = equipo_local if win_or_draw else equipo_visitante #equipo que tiene win_or_draw = True
-            posible_perdedor = equipo_local if not win_or_draw else equipo_visitante #equipo que tiene win_or_draw = False
             
-            coste_apuesta = randint(1,4)
-            dinero_disponible=1000
-            apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
-            dinero_disponible -= apuesta
-            
-            posible_ganancia_alta = apuesta + (apuesta * coste_apuesta)
-            posible_ganancia_baja = apuesta + ((coste_apuesta/10)*apuesta)
-            posible_ganancia_empate = apuesta * 1.5
-            
-            print(f'Si el ganador es {posible_ganador} ganaras ${posible_ganancia_baja}')
-            print(f'Si el ganador es {posible_perdedor} ganaras ${posible_ganancia_alta}')
-            print(f'Si empatan ganaras ${posible_ganancia_empate}')
-            
-            
-            equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar (o Empate): ").title() #Agregar validaciones
-            while equipo_que_deseas_apostar != equipo_local and equipo_que_deseas_apostar != equipo_visitante and equipo_que_deseas_apostar != 'Empate':
-                print('La opcion ingresada no es correcta')
-                equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar: ").title()
-            # LA FUNCION APOSTAR DEBERA TERMINAR ACA, LA FUNCION DEBERA DEVOLVER EL EQUIPO AL QUE SE LE APOSTO
-            
-            calcular_ganador(equipo_que_deseas_apostar,equipo_local,equipo_visitante,posible_ganancia_alta,posible_ganancia_baja,posible_ganancia_empate,posible_ganador,posible_perdedor)
-                
-
+        apostar(fixtures)
         
-            
     else:
         print("No se encontraron partidos para la fecha especificada en la primera fase")
-apostar()
+comenzar_sistema_apuestas()
 
