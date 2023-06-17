@@ -290,5 +290,4 @@ def comenzar_sistema_apuestas():
         
     else:
         print("No se encontraron partidos para la fecha especificada en la primera fase")
-comenzar_sistema_apuestas()
 

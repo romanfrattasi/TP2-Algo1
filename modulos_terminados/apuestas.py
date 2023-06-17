@@ -105,3 +105,5 @@ if response.status_code == 200:
 
 else:
     print("Error en la solicitud de partidos:", response.status_code)
+
+##MODULARIZADO Y FUNCIONANDO EN LLAMADOS_A_LA_API
