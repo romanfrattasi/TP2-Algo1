@@ -23,7 +23,7 @@ response = requests.get(url, headers=headers, params=payload)
 if response.status_code == 200:
     data = response.json()
     if data['results'] > 0:
-        posiciones = data['response'][0]['league']['standings'][0]
+        posiciones = data['response'][0]['league']['standings'][1]
 
         print("Tabla de Posiciones:")
         for posicion in posiciones:
