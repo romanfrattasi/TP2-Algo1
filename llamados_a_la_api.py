@@ -3,46 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
 from random import randint
-
-
-payload = {
-    'league':128,
-    'season':2023
-}
-
-HEADERS = {
-        "x-rapidapi-key": "09d1ab5e3cf7f087a82915004a769d76",
-        "x-rapidapi-host": "v3.football.api-sports.io"
-    }
-
-ids_equipos=  {'Gimnasia L.P.': 434,
-               'River Plate': 435,
-               'Racing Club': 436,
-               'Rosario Central': 437,
-               'Velez Sarsfield': 438,
-               'Godoy Cruz': 439,
-               'Belgrano Cordoba': 440,
-               'Union Santa Fe': 441,
-               'Defensa Y Justicia': 442,
-               'Huracan': 445,
-               'Lanus': 446,
-               'Colon Santa Fe': 448,
-               'Banfield': 449,
-               'Estudiantes L.P.': 450,
-               'Boca Juniors': 451,
-               'Tigre': 452,
-               'Independiente': 453,
-               'Atletico Tucuman': 455,
-               'Talleres Cordoba': 456,
-               'Newells Old Boys': 457,
-               'Argentinos JRS': 458,
-               'Arsenal Sarandi': 459,
-               'San Lorenzo': 460,
-               'Sarmiento Junin': 474,
-               'Instituto Cordoba': 478,
-               'Platense': 1064,
-               'Central Cordoba de Santiago': 1065,
-               'Barracas Central': 2432}
+import buscar_usuarios
 
 #PRE:
 #POST:
@@ -62,15 +23,15 @@ def pedir_equipo(ids_equipos: dict) -> str:
 
 #PRE:
 #POST:
-def modificar_payload(equipo: str, payload: dict) ->dict:
+def modificar_payload(equipo: str, payload: dict, ids_equipos) ->dict:
     payload.update({'team':ids_equipos[equipo]})
     return payload
 
 #PRE:
 #POST: Muestra un gráfico de los goles anotados de un equipo por minuto.
-def imprimir_grafico(ids_equipos: dict, payload: dict) -> None:
+def imprimir_grafico(ids_equipos: dict, payload: dict, HEADERS) -> None:
     equipo_deseado = pedir_equipo(ids_equipos)
-    payload = modificar_payload(equipo_deseado, payload)
+    payload = modificar_payload(equipo_deseado, payload, ids_equipos)
     response = llamado_api("https://v3.football.api-sports.io/teams/statistics", payload, HEADERS)
     if response.status_code == 200:
         data = response.json()
@@ -85,7 +46,7 @@ def imprimir_grafico(ids_equipos: dict, payload: dict) -> None:
 
 #PRE:
 #POST:
-def mostrar_escudo_e_informacion(payload: dict, ids_equipos: dict) ->None:
+def mostrar_escudo_e_informacion(payload: dict, ids_equipos: dict, HEADERS) ->None:
     response = llamado_api("https://v3.football.api-sports.io/teams", payload, HEADERS)
     if response.status_code == 200:
         data = response.json()
@@ -123,7 +84,7 @@ def pedir_temporada() ->int:
 
 #PRE:
 #POST:
-def mostrar_tabla_de_posiciones() ->None:
+def mostrar_tabla_de_posiciones(HEADERS) ->None:
     payload_de_posiciones = {
     "league": 128,
     "season": pedir_temporada()
@@ -150,7 +111,7 @@ def mostrar_tabla_de_posiciones() ->None:
 
 #PRE:
 #POST:
-def mostrar_jugadores(payload: dict, headers: dict, ids_equipos: dict) ->None:
+def mostrar_jugadores(payload: dict, HEADERS: dict, ids_equipos: dict) ->None:
     response = llamado_api("https://v3.football.api-sports.io/teams", payload, HEADERS)
     if response.status_code == 200:
         data = response.json()
@@ -164,7 +125,7 @@ def mostrar_jugadores(payload: dict, headers: dict, ids_equipos: dict) ->None:
                 print(f"Equipo: {nombre_equipo}")
                 print("Jugadores:")
                 url_jugador = "https://v3.football.api-sports.io/players"
-                response_jugador = requests.get(url_jugador, headers=headers, params=payload_jugador)
+                response_jugador = llamado_api(url_jugador, payload_jugador, HEADERS)
                 if response_jugador.status_code == 200:
                     jugadores = response_jugador.json()['response']
                     for jugador in jugadores:
@@ -217,29 +178,42 @@ def buscar_posible_ganador(equipo_local, equipo_visitante, win_or_draw):
     posible_perdedor = equipo_local if not win_or_draw else equipo_visitante #equipo que tiene win_or_draw = False
     return posible_ganador, posible_perdedor
 
-def posibles_ganancias(posible_ganador, posible_perdedor, dinero_disponible):
+def posibles_ganancias(posible_ganador, posible_perdedor, dinero_a_apostar):
     coste_apuesta = randint(1,4)
-    apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
-    dinero_disponible -= apuesta
     
-    posible_ganancia_alta = apuesta + (apuesta * coste_apuesta)
-    posible_ganancia_baja = apuesta + ((coste_apuesta/10)*apuesta)
-    posible_ganancia_empate = apuesta * 1.5
+    posible_ganancia_alta = dinero_a_apostar + (dinero_a_apostar * coste_apuesta)
+    posible_ganancia_baja = dinero_a_apostar + ((coste_apuesta/10)*dinero_a_apostar)
+    posible_ganancia_empate = dinero_a_apostar * 1.5
     
     print(f'Si el ganador es {posible_ganador} ganaras ${posible_ganancia_baja}')
     print(f'Si el ganador es {posible_perdedor} ganaras ${posible_ganancia_alta}')
     print(f'Si empatan ganaras ${posible_ganancia_empate}')
     
-    return posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate, dinero_disponible
+    return posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate
+
+def ingresar_apuesta(dinero_disponible):
+    apuesta = None
+    while apuesta is None:
+        try:
+            apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
+            while apuesta > dinero_disponible or apuesta <= 0:
+                print(f'El monto ingresado no es valido. Tenes ${dinero_disponible} disponibles para apostar')
+                apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
+        except ValueError:
+            print('El monto ingresado no es valido. Intenta de nuevo.')
     
-def apostar(fixtures):
-    dinero_disponible = 1000
+    return apuesta
+
+def apostar(fixtures, nombre_usuario, dinero_disponible):
     equipo_local = fixtures[0]['teams']['home']['name']
     equipo_visitante = fixtures[0]['teams']['away']['name']
     win_or_draw = fixtures[0]["predictions"]["win_or_draw"]
     posible_ganador, posible_perdedor = buscar_posible_ganador(equipo_local, equipo_visitante, win_or_draw)
     
-    posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate, dinero_disponible = posibles_ganancias(posible_ganador, posible_perdedor, dinero_disponible)
+    dinero_a_apostar = ingresar_apuesta(dinero_disponible)
+    dinero_disponible -= dinero_a_apostar
+    
+    posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate = posibles_ganancias(posible_ganador, posible_perdedor, dinero_a_apostar)
     
     equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar (o Empate): ").title() 
     
@@ -252,17 +226,24 @@ def apostar(fixtures):
     if equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == posible_ganador:
         print(f'Felicitaciones! Ganaste ${posible_ganancia_baja}')
         dinero_disponible += posible_ganancia_baja
+        buscar_usuarios.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
+        buscar_usuarios.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     elif equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == posible_perdedor:
         print(f'Felicitaciones! Ganaste ${posible_ganancia_alta}')
         dinero_disponible += posible_ganancia_alta
+        buscar_usuarios.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
+        buscar_usuarios.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     elif equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == 'Empate':
         print(f'Felicitaciones! Ganaste ${posible_ganancia_empate}')
         dinero_disponible += posible_ganancia_empate
+        buscar_usuarios.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
+        buscar_usuarios.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     else:
         print('Perdiste!')
+        buscar_usuarios.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Pierde')
+        buscar_usuarios.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
 
-
-def comenzar_sistema_apuestas():
+def comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible):
     payload_fecha ={"league":"128",
           "season": "2023",
           "date":  '2023-06-12'}
@@ -286,7 +267,7 @@ def comenzar_sistema_apuestas():
             data = response_nuevo.json()
             fixtures = data['response']
             
-        apostar(fixtures)
+        apostar(fixtures, nombre_usuario, dinero_disponible)
         
     else:
         print("No se encontraron partidos para la fecha especificada en la primera fase")
