@@ -178,7 +178,7 @@ def main():
         elif opcion =='6':
             buscar_usuarios.usuario_mas_apostador()
         elif opcion =='7':
-            pass
+            buscar_usuarios.usuario_mas_ganador()
         elif opcion =='8':
             dinero_disponible = buscar_usuarios.obtener_dinero_disponible(nombre_usuario)
             llamados_a_la_api.comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible)

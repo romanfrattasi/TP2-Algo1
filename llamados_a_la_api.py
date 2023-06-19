@@ -5,6 +5,8 @@ from io import BytesIO
 from random import randint
 import buscar_usuarios
 
+
+
 #PRE:
 #POST:
 def llamado_api(url: str, payload: dict, headers: dict):
@@ -242,16 +244,34 @@ def apostar(fixtures, nombre_usuario, dinero_disponible):
         print('Perdiste!')
         buscar_usuarios.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Pierde')
         buscar_usuarios.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
+    
+
+def verificar_fecha_existente(jornada):
+    while jornada<1 or jornada>27:
+        print("te avise y lo escribiste mal igual")
+        jornada=int(input("elije la jornada a buscar que tiene que ser entre la 1 y la 27: "))
+    return jornada
+        
+    
+        
+    
 
 def comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible):
+    jornada_a_buscar=int(input("elije la jornada a buscar que tiene que ser entre la 1 y la 27: "))
+    jornada_a_buscar=verificar_fecha_existente(jornada_a_buscar)
+    jornada=str(jornada_a_buscar)
+    round_a_buscar="1st Phase"+ " " + "-"+ " "+jornada
+    "las mostramos"
     payload_fecha ={"league":"128",
           "season": "2023",
-          "date":  '2023-06-12'}
+          "round": round_a_buscar}
     url = "https://v3.football.api-sports.io/fixtures"
     response_fecha=llamado_api(url,payload_fecha,HEADERS)
     if response_fecha.status_code ==200:
         data = response_fecha.json()
         fixtures = data['response']
+
+
         if fixtures:
             lista_partidos_por_fecha, diccionario_id_partidos = organizar_partidos_por_fecha(fixtures)
             mostrar_partidos_por_pantalla(lista_partidos_por_fecha)
@@ -271,4 +291,8 @@ def comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible):
         
     else:
         print("No se encontraron partidos para la fecha especificada en la primera fase")
+        
+
+
+
 

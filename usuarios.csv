@@ -1,4 +1,5 @@
 mail,Nombre usuario,Contrasenia,Cantidad apostada hasta el momento,Fecha ultima apuesta(YYYY/MM/DD),Dinero disponible
 02balella@gmail.com,juan15,$pbkdf2-sha256$29000$h3DuXSvFuLcWYgwBQMgZQw$RkXC5O.4YS08JKl/Dtim77oNyL7fzUExpUm0cofJD7I,0.0,,0.0
-romanfrattasi@gmail.com,romanfra,$pbkdf2-sha256$29000$zRljTAmB8B6jlPK.V6oVgg$gVogxi8Z1MyEUINfBTJkAAxvyi38gIgAxGNGtS0otxE,10000.0,19-06-23,31000.0
+romanfrattasi@gmail.com,romanfra,$pbkdf2-sha256$29000$zRljTAmB8B6jlPK.V6oVgg$gVogxi8Z1MyEUINfBTJkAAxvyi38gIgAxGNGtS0otxE,11100.0,19-06-23,29900.0
 lorenzocabirta@gmail.com,loren_cabirta,$pbkdf2-sha256$29000$ppRSao1RyrlXipFSKkUoxQ$p5y61/p7ojXjOhS2AncwL.oCTmtfLm1txUg03siyuUc,0.0,,0.0
+mail3,messi,$pbkdf2-sha256$29000$HWMsRUhJaS1lTAlhLOU8hw$0OnI0f0y6y6oXrPYXnfrQISh132XcjtpLPiIzfur1eQ,20000.0,19-06-23,0.0

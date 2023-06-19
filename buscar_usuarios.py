@@ -50,7 +50,7 @@ def cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, diner
         if usuario[1] == nombre_usuario:
             usuario[3] = float(usuario[3]) + dinero_apuesta
             usuario[4] = fecha
-            usuario[5] = float(usuario[5]) + dinero_disponible
+            usuario[5] =dinero_disponible
     with open("usuarios.csv", "w", newline='') as usuarios:
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow(["mail", "Nombre usuario", "Contrasenia", "Cantidad apostada hasta el momento", "Fecha ultima apuesta(YYYY/MM/DD)", "Dinero disponible"])
@@ -81,4 +81,17 @@ def obtener_dinero_disponible(nombre_usuario):
     return dinero_disponible
 
 def usuario_mas_ganador():
-    pass
+    lista_usuarios=obtener_datos_de_los_usuarios("transacciones.csv")
+    diccionario_ganador={}
+    for usuario in lista_usuarios:
+        if usuario[0] not in diccionario_ganador:
+            diccionario_ganador[usuario[0]]=0
+            if usuario[2]=="Gana":
+                diccionario_ganador[usuario[0]]=1
+        else:
+            if usuario[2]=="Gana":
+                diccionario_ganador[usuario[0]]+=1
+    usuario_mas_ganador=(sorted(diccionario_ganador.items(),key=lambda x:x[1],reverse=True)[:1])
+    print(f"el usuario mas ganador es {usuario_mas_ganador[0][0]} con una tolidad de {usuario_mas_ganador[0][1]} victorias")
+    
+
