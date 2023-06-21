@@ -1,6 +1,8 @@
 import buscar_usuarios, llamados_a_la_api
 import csv
 from passlib.hash import pbkdf2_sha256
+import os
+
 
 #PRE:
 #POST:
@@ -90,8 +92,8 @@ def menu_bienvenida()->str:
         nombre_usuario = registro_usuario()
     return nombre_usuario
 
-##############################
-
+#PRE:
+#POST:
 def menu(OPCIONES):
     opciones_validas = '123456789'
     
@@ -104,7 +106,6 @@ def menu(OPCIONES):
         for i in range(len(OPCIONES)):
             print(f'{i+1}- {OPCIONES[i]}')
         opcion = input('Elija una opcion: ')
-    
     return opcion
 
 def main():
@@ -159,6 +160,7 @@ def main():
     opcion = menu(OPCIONES)
     
     while opcion != '9':
+        os.system("cls")
         if opcion == '1':
             llamados_a_la_api.mostrar_jugadores(payload, HEADERS, ids_equipos)
         elif opcion =='2':
@@ -184,5 +186,5 @@ def main():
             llamados_a_la_api.comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible)
         
         opcion = menu(OPCIONES)
-        
+        os.system("cls")
 main()

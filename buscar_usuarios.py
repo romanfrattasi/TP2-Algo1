@@ -1,12 +1,15 @@
 import csv
 from datetime import datetime
 
+#PRE:
+#POST:
 def obtener_fecha():
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime('%d-%m-%y')
-    
     return fecha_formateada
 
+#PRE:
+#POST:
 def cargar_dinero_a_csv_usuarios(monto, nombre_usuario , todos_los_usuarios):
     for usuario in todos_los_usuarios:
         if usuario[1] == nombre_usuario:
@@ -15,7 +18,9 @@ def cargar_dinero_a_csv_usuarios(monto, nombre_usuario , todos_los_usuarios):
         escritor_csv = csv.writer(usuarios, delimiter=',')
         escritor_csv.writerow(["mail", "Nombre usuario", "Contrasenia", "Cantidad apostada hasta el momento", "Fecha ultima apuesta(YYYY/MM/DD)", "Dinero disponible"])
         escritor_csv.writerows(todos_los_usuarios)
-        
+
+#PRE:
+#POST:
 def cargar_a_csv_transacciones(monto, nombre_de_usuario, tipo_transaccion):
     fecha = obtener_fecha()
     with open("transacciones.csv", 'a', newline='') as transacciones:
@@ -42,7 +47,9 @@ def cargar_dinero(monto: float, nombre_usuario: str)->None:
     usuarios_de_csv_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     cargar_dinero_a_csv_usuarios(monto, nombre_usuario , usuarios_de_csv_usuarios)
     cargar_a_csv_transacciones(monto, nombre_usuario, 'Deposita')
-    
+
+#PRE:
+#POST:
 def cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_apuesta):
     fecha = obtener_fecha()
     usuarios_csv_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
@@ -62,24 +69,25 @@ def usuario_mas_apostador()->None:
     todos_los_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     usuarios_y_montos = [[usuario[1],usuario[3]] for usuario in todos_los_usuarios]
     usuarios_y_montos.sort(key = lambda lista: float(lista[1]), reverse=True)
-    
     print(f'El usuario que mas dinero aposto es {usuarios_y_montos[0][0]} con ${usuarios_y_montos[0][1]}')
 
 #PRE:
 #POST:
-
 def filtrar_usuarios(nombre_usuario, todos_los_usuarios):
     for usuario in todos_los_usuarios:
         if usuario[1] == nombre_usuario:
             return usuario
 
+#PRE:
+#POST:
 def obtener_dinero_disponible(nombre_usuario):
     todos_los_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     usuario = filtrar_usuarios(nombre_usuario, todos_los_usuarios)
     dinero_disponible = float(usuario[5])
-    
     return dinero_disponible
 
+#PRE:
+#POST:
 def usuario_mas_ganador():
     lista_usuarios=obtener_datos_de_los_usuarios("transacciones.csv")
     diccionario_ganador={}
@@ -93,5 +101,5 @@ def usuario_mas_ganador():
                 diccionario_ganador[usuario[0]]+=1
     usuario_mas_ganador=(sorted(diccionario_ganador.items(),key=lambda x:x[1],reverse=True)[:1])
     print(f"el usuario mas ganador es {usuario_mas_ganador[0][0]} con una tolidad de {usuario_mas_ganador[0][1]} victorias")
-    
+
 
