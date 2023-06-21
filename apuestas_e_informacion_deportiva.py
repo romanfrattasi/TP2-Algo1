@@ -259,7 +259,7 @@ def apostar(fixtures, nombre_usuario, dinero_disponible):
 #PRE:
 #POST:
 def verificar_fecha_existente(jornada):
-    while jornada<1 or jornada>27:
+    while(jornada < 1 or jornada > 27):
         print("Incorrecto. Intenta nuevamente.")
         jornada=int(input("Seleccione la fecha en la cual quiere apostar. Debe ser entre la 1(inclusive) y la 27(inclusive): "))
     return jornada
@@ -272,16 +272,16 @@ def pedir_fecha_a_apostar() -> int:
         try:
             fecha = int(input("Seleccione la fecha en la cual quiere apostar. Debe ser entre la 1(inclusive) y la 27(inclusive): "))
         except ValueError:
-            print("Seleccione la fecha en la cual quiere apostar. Debe ser entre la 1(inclusive) y la 27(inclusive): ")
+            print("Incorrecto, intente nuevamente: ")
     return fecha
 
 #PRE:
 #POST:
 def comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible):
     jornada_a_buscar= pedir_fecha_a_apostar()
+    jornada_a_buscar = verificar_fecha_existente(jornada_a_buscar)
     jornada=str(jornada_a_buscar)
     round_a_buscar="1st Phase"+ " " + "-"+ " "+jornada
-    "las mostramos"
     payload_fecha ={"league":"128",
           "season": "2023",
           "round": round_a_buscar}
