@@ -47,9 +47,9 @@ def pedir_monto_a_depositar() -> float:
     monto = None
     while monto is None:
         try :
-            monto = float(input('Ingresa el monto que deseas depositar: '))
+            monto = float(input('Ingresá el monto que deseas depositar: '))
         except ValueError:
-            print('El monto ingresado no es valido. Intenta de nuevo.')
+            print('El monto ingresado no es válido. Intentá de nuevo.')
     return monto
 
 #PRE: Se recibe un nombre de usuario y el monto a depositar.
@@ -82,7 +82,7 @@ def usuario_mas_apostador()->None:
     todos_los_usuarios = obtener_datos_de_los_usuarios("usuarios.csv")
     usuarios_y_montos = [[usuario[1],usuario[3]] for usuario in todos_los_usuarios]
     usuarios_y_montos.sort(key = lambda lista: float(lista[1]), reverse=True)
-    print(f'El usuario que mas dinero aposto es {usuarios_y_montos[0][0]} con ${usuarios_y_montos[0][1]}')
+    print(f'🤑El usuario que mas dinero apostó es {usuarios_y_montos[0][0]} con ${usuarios_y_montos[0][1]}🤑')
 
 #PRE: Recibe un nombre de usuario y una lista con todos los usuarios.
 #POST: Devuelve la lista específica del usuario seleccionado.
@@ -113,4 +113,4 @@ def usuario_mas_ganador() -> None:
             if usuario[2]=="Gana":
                 diccionario_ganador[usuario[0]]+=1
     usuario_mas_ganador=(sorted(diccionario_ganador.items(),key=lambda x:x[1],reverse=True)[:1])
-    print(f"el usuario mas ganador es {usuario_mas_ganador[0][0]} con una tolidad de {usuario_mas_ganador[0][1]} victorias")
+    print(f"💸El usuario mas ganador es {usuario_mas_ganador[0][0]} con una tolidad de {usuario_mas_ganador[0][1]} victorias💸")

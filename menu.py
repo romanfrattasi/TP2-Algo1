@@ -20,14 +20,14 @@ def verificar_constrasenia(nombre_usuario: str,contrasenia: str)->str:
     for i in range(len(lista_usuarios)):
         if nombre_usuario == lista_usuarios[i]:
             while not pbkdf2_sha256.verify(contrasenia, lista_contrasenias[i]):
-                contrasenia=input("Error, esta no es la contraseña correcta, intentelo otra vez: ")
+                contrasenia=input("🔴 Error, esta no es la contraseña correcta, inténtelo otra vez: ")
             if  pbkdf2_sha256.verify(contrasenia, lista_contrasenias[i]):
                 return contrasenia
 
 #PRE:
 #POST: Valida el ingreso de usuario y contraseña, devuelve el nombre del usuario.
 def ingreso_usuario()->str:
-    nombre_usuario = input('Ingresa tu nombre de usuario: ')
+    nombre_usuario = input('🟢 Ingresá tu nombre de usuario: ')
     datos_usuario=[]
     with open("usuarios.csv", 'r', newline='') as usuarios:
         lista_usuario=[]
@@ -39,8 +39,8 @@ def ingreso_usuario()->str:
     for i in range(len(datos_usuario)):
         lista_usuario.append(datos_usuario[i][1])
     while nombre_usuario not in lista_usuario:
-        nombre_usuario =input('El usuario que acabas de escribir no existe, ingresalo nuevamente: ')
-    contrasena = input('Ingresa tu contraseña: ')
+        nombre_usuario =input('🔴 El usuario que acabas de escribir no existe, ingresalo nuevamente: ')
+    contrasena = input('🟢 Ingresá tu contraseña: ')
     contrasena=verificar_constrasenia(nombre_usuario,contrasena)
     return nombre_usuario
 
@@ -58,17 +58,17 @@ def verificar_usuario_o_mail_repetido(usuario_o_mail: str, posicion_en_archivo: 
     for i in range(len(datos_usuario)):
         lista_usuario_o_mail.append(datos_usuario[i][posicion_en_archivo])
     while usuario_o_mail in lista_usuario_o_mail:
-        usuario_o_mail = input(f'Este {formato} ya está ocupado, escribe otro: ')
+        usuario_o_mail = input(f'Este {formato} ya está ocupado, escribí otro: ')
     return usuario_o_mail
 
 #PRE:
 #POST: Registra un nuevo usuario o valida el ingreso de uno existente, devuelve el nombre del usuario.
 def registro_usuario()->str:
-    email = input('Ingresa tu email: ')
+    email = input('🟢 Ingresá tu email: ')
     email = verificar_usuario_o_mail_repetido(email, 0, "email")  
-    nombre_usuario = input('Ingresa tu nombre de usuario: ')
+    nombre_usuario = input('🟢 Ingresá tu nombre de usuario: ')
     nombre_usuario = verificar_usuario_o_mail_repetido(nombre_usuario, 1, "nombre de usuario")  
-    contrasena = input('Ingresa tu contraseña: ')
+    contrasena = input('🟢 Ingresá tu contraseña: ')
     hash_contrasena = pbkdf2_sha256.hash(contrasena)
     with open("usuarios.csv", 'a', newline='') as usuarios:
         escritor_csv = csv.writer(usuarios, delimiter=',')
@@ -83,7 +83,7 @@ def menu_bienvenida()->str:
     while opcion != '0' and opcion != '1':
         opcion = input('Pulse 0 para ingresar a su cuenta o 1 para registrarse: ')
         if opcion != '0' and opcion != '1':
-            print("Opción inválida. Intenta nuevamente.")
+            print("Opción inválida. Intentá nuevamente.")
     if opcion == '0':
         nombre_usuario = ingreso_usuario()
     elif opcion == '1':
@@ -93,26 +93,27 @@ def menu_bienvenida()->str:
 #PRE:
 #POST: Muestra las opciones disponibles, devuelve la opción elegida.
 def menu(OPCIONES: tuple) -> str:
-    print("➖➖➖➖➖➖➖➖➖➖")
+    print("➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖")
+    print("➡️  Listado de opciones ⬅️")
     opciones_validas = '123456789'
     for i in range(len(OPCIONES)):
         print(f'{i+1}- {OPCIONES[i]}')
-    opcion = input('Elija una opcion: ')
+    opcion = input('Elija una opción: ')
     while opcion not in opciones_validas:
-        print('Opcion incorrecta. Intente otra vez')
+        print('Opción incorrecta. Intente otra vez')
         for i in range(len(OPCIONES)):
             print(f'{i+1}- {OPCIONES[i]}')
-        opcion = input('Elija una opcion: ')
+        opcion = input('Elija una opción: ')
     return opcion
 
 def main():
     OPCIONES = ('Mostrar plantel',
                 'Mostrar tabla de posiciones',
-                'Mostrar informacion de un equipo',
+                'Mostrar información de un equipo',
                 'Grafico goles/minutos',
                 'Cargar dinero',
-                'Mostrar el usuario que mas dinero aposto',
-                'Mostrar el usuario que mas veces gano',
+                'Mostrar el usuario que mas dinero apostó',
+                'Mostrar el usuario que mas veces ganó',
                 'Apostar',
                 'Salir'
                 )

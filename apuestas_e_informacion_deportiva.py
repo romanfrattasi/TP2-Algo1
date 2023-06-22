@@ -25,9 +25,9 @@ def modificar_nombre_de_equipos_problemáticos(nombre_de_equipo: str) -> str:
 def pedir_equipo(ids_equipos: dict) -> str:
     for equipo in ids_equipos.keys():
         print(f"{equipo}")
-    equipo = input("Escriba el equipo deseado: ").title()
+    equipo = input("🔵 Escriba el equipo deseado: ").title()
     while equipo not in ids_equipos:
-        equipo = input("El equipo no es correcto, intente nuevamente: ").title()
+        equipo = input("🔴 El equipo no es correcto, intente nuevamente: ").title()
     equipo = modificar_nombre_de_equipos_problemáticos(equipo)
     return equipo
 
@@ -51,7 +51,7 @@ def imprimir_grafico(ids_equipos: dict, payload: dict, HEADERS) -> None:
         plt.plot(eje_X, eje_Y)
         plt.show()
     else:
-        print("Error en la solicitud de equipos:", response.status_code)
+        print("Error en la solicitud.", response.status_code)
     del payload["team"]
 
 #PRE: Recibe el payload y headers para llamar a la api, junto con el diccionario de todos los equipos.
@@ -72,13 +72,13 @@ def mostrar_escudo_e_informacion(payload: dict, ids_equipos: dict, HEADERS) ->No
             if nombre_equipo.lower() == equipo_buscado.lower():
                 response = requests.get(escudo_url)
                 if response.status_code == 200:
-                    print(f"El nombre del estadio del equipo {nombre_equipo} es: {cancha}, ubicado en la ciudad de {ciudad_cancha}, en la dirección {direccion_cancha}, el cual cuenta con una capacidad de {capacidad} espectadores.")
+                    print(f"🟢 El nombre del estadio del equipo {nombre_equipo} es: {cancha}, ubicado en la ciudad de {ciudad_cancha}, en la dirección {direccion_cancha}, el cual cuenta con una capacidad de {capacidad} espectadores.")
                     imagen_de_escudo = Image.open(BytesIO(response.content))
                     imagen_de_escudo.show()
                 else:
-                    print("Error al obtener el escudo:", response.status_code)
+                    print("Error al obtener los datos del equipo:", response.status_code)
     else:
-        print("Error en la solicitud de equipos:", response.status_code)
+        print("Error en la solicitud.", response.status_code)
 
 #PRE:
 #POST: Devuelve la temporada elegida.
@@ -86,9 +86,9 @@ def pedir_temporada() ->int:
     temporada = None
     while temporada is None:
         try:
-            temporada = int(input("Por favor ingrese la temporada (2015 a 2023): "))
+            temporada = int(input("🔵 Por favor ingrese la temporada (2015 a 2023): "))
         except ValueError:
-            print("Ingreso erróneo. Intenta de nuevo.")
+            print("🔴 Ingreso erróneo. Intentá de nuevo.")
     return temporada
 
 #PRE: Recibe el diccionario de headers para hacer llamado a la api.
@@ -116,7 +116,7 @@ def mostrar_tabla_de_posiciones(HEADERS: dict) ->None:
         else:
             print("No se encontraron datos de la tabla de posiciones.")
     else:
-        print("Error en la solicitud:", response.status_code)
+        print("Error en la solicitud.", response.status_code)
 
 #PRE: Recibe payload y headers para el llamado a la api, junto con el diccionario de todos los equipos.
 #POST: Muestra el plantel del equipo elegido.
@@ -142,9 +142,9 @@ def mostrar_jugadores(payload: dict, HEADERS: dict, ids_equipos: dict) ->None:
                         posicion = jugador['statistics'][0]['games']['position']
                         print(f"- {nombre_jugador} ({posicion})")
                 else:
-                    print("Error en la solicitud de jugadores:", response_jugador.status_code)
+                    print("Error en la solicitud de jugadores.", response_jugador.status_code)
     else:
-        print("Error en la solicitud de equipos:", response.status_code)
+        print("Error en la solicitud.", response.status_code)
 
 #PRE:
 #POST: Devuelve la fecha o el partido.
@@ -152,9 +152,9 @@ def pedir_fecha_o_partido_a_apostar() -> int:
     fecha_o_partido = None
     while fecha_o_partido is None:
         try:
-            fecha_o_partido = int(input("Ingrese el numero: "))
+            fecha_o_partido = int(input("🟠 Ingrese el número: "))
         except ValueError:
-            print("Incorrecto, intente nuevamente: ")
+            print("🔴 Incorrecto, intente nuevamente: ")
     return fecha_o_partido
 
 #PRE:
@@ -201,6 +201,7 @@ def mostrar_partidos_por_pantalla(lista_partidos_por_fecha: list) -> None:
 #PRE: Se recibe lista con todos los partidos y diccionario con los id's de cada uni.
 #POST: Devuelve el id del partido elegido.
 def seleccion_partido(lista_partidos_por_fecha: list, diccionario_id_partidos: dict) -> int:
+    print("🟠 Elija el partido por el que quiere apostar.")
     indice_de_partido = pedir_fecha_o_partido_a_apostar()
     indice_de_partido = verificar_partido_existente(indice_de_partido)
     print(f"Usted quiere apostar al partido de {lista_partidos_por_fecha[indice_de_partido]}")
@@ -221,9 +222,9 @@ def posibles_ganancias(posible_ganador: str, posible_perdedor:str, dinero_a_apos
     posible_ganancia_alta = dinero_a_apostar + (dinero_a_apostar * coste_apuesta)
     posible_ganancia_baja = dinero_a_apostar + ((coste_apuesta/10)*dinero_a_apostar)
     posible_ganancia_empate = dinero_a_apostar * 1.5
-    print(f'Si el ganador es {posible_ganador} ganaras ${posible_ganancia_baja}')
-    print(f'Si el ganador es {posible_perdedor} ganaras ${posible_ganancia_alta}')
-    print(f'Si empatan ganaras ${posible_ganancia_empate}')
+    print(f'Si el ganador es {posible_ganador} ganaras ${posible_ganancia_baja} 💸')
+    print(f'Si empatan ganaras ${posible_ganancia_empate} 💸💸')
+    print(f'Si el ganador es {posible_perdedor} ganaras ${posible_ganancia_alta} 💸💸💸')
     return posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate
 
 #PRE: Se recibe el dinero disponible.
@@ -234,11 +235,11 @@ def ingresar_apuesta(dinero_disponible: float) -> float:
         try:
             apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
             while apuesta > dinero_disponible or apuesta <= 0:
-                print(f'El monto ingresado no es valido. Tenes ${dinero_disponible} disponibles para apostar')
+                print(f'🔴 El monto ingresado no es valido. Tenes ${dinero_disponible} disponibles para apostar')
                 apuesta = None
                 apuesta = float(input('¿Cuanto dinero deseas apostar?: '))
         except ValueError:
-            print('El monto ingresado no es valido. Intenta de nuevo.')
+            print('🔴 El monto ingresado no es valido. Intenta de nuevo.')
     return apuesta
 
 #PRE: Se recibe el fixture, nombre de usuario y el dinero disponible.
@@ -251,28 +252,28 @@ def apostar(fixtures: dict, nombre_usuario: str, dinero_disponible: float) -> No
     dinero_a_apostar = ingresar_apuesta(dinero_disponible)
     dinero_disponible -= dinero_a_apostar
     posible_ganancia_alta, posible_ganancia_baja, posible_ganancia_empate = posibles_ganancias(posible_ganador, posible_perdedor, dinero_a_apostar)
-    equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar (o Empate): ").title() 
+    equipo_que_deseas_apostar = input("🟠 Escribe el equipo por el que deseas apostar (o sino escribe Empate): ").title() 
     while equipo_que_deseas_apostar != equipo_local and equipo_que_deseas_apostar != equipo_visitante and equipo_que_deseas_apostar != 'Empate':
-        print('La opcion ingresada no es correcta')
+        print('🔴 La opcion ingresada no es correcta')
         equipo_que_deseas_apostar = input("Escribe el equipo que deseas apostar: ").title()
     equipo_ganador = calcular_ganador(equipo_local,equipo_visitante)
     if equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == posible_ganador:
-        print(f'Felicitaciones! Ganaste ${posible_ganancia_baja}')
+        print(f'Felicitaciones! Ganaste ${posible_ganancia_baja} 💸')
         dinero_disponible += posible_ganancia_baja
         modificar_y_leer_archivoscsv.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
         modificar_y_leer_archivoscsv.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     elif equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == posible_perdedor:
-        print(f'Felicitaciones! Ganaste ${posible_ganancia_alta}')
+        print(f'Felicitaciones! Ganaste ${posible_ganancia_alta} 💸💸💸')
         dinero_disponible += posible_ganancia_alta
         modificar_y_leer_archivoscsv.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
         modificar_y_leer_archivoscsv.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     elif equipo_ganador == equipo_que_deseas_apostar and equipo_ganador == 'Empate':
-        print(f'Felicitaciones! Ganaste ${posible_ganancia_empate}')
+        print(f'Felicitaciones! Ganaste ${posible_ganancia_empate} 💸💸')
         dinero_disponible += posible_ganancia_empate
         modificar_y_leer_archivoscsv.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Gana')
         modificar_y_leer_archivoscsv.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
     else:
-        print('Perdiste!')
+        print('Perdiste la apuesta 🫤')
         modificar_y_leer_archivoscsv.cargar_a_csv_transacciones(dinero_a_apostar, nombre_usuario, 'Pierde')
         modificar_y_leer_archivoscsv.cargar_datos_apuesta_a_csv_usuarios(dinero_disponible, nombre_usuario, dinero_a_apostar)
 
@@ -280,14 +281,14 @@ def apostar(fixtures: dict, nombre_usuario: str, dinero_disponible: float) -> No
 #POST: Verifica que la jornada este en el rango correspondiente y luego la devuelve.
 def verificar_fecha_existente(jornada: int):
     while(jornada < 1 or jornada > 27):
-        print("Incorrecto. Intenta nuevamente.")
+        print("🔴 Incorrecto. Intentá nuevamente.")
         jornada = pedir_fecha_o_partido_a_apostar() 
     return jornada
 
 #PRE: Se reciben los headers para llamar a la api, junto con el nombre de usuario y su dinero disponible.
 #POST: Se desarrolla el flujo del sistema de apuestas.
 def comenzar_sistema_apuestas(HEADERS: dict, nombre_usuario: str, dinero_disponible: float) -> None:
-    print("Debe elegir la fecha en la cual quiere apostar. Debe ser entre la 1(inclusive) y la 27(inclusive).")
+    print("🟠 Debe elegir la fecha en la cual quiere apostar. Debe ser entre la 1(inclusive) y la 27(inclusive).")
     jornada_a_buscar= pedir_fecha_o_partido_a_apostar()
     jornada_a_buscar = verificar_fecha_existente(jornada_a_buscar)
     jornada=str(jornada_a_buscar)
@@ -313,4 +314,4 @@ def comenzar_sistema_apuestas(HEADERS: dict, nombre_usuario: str, dinero_disponi
             fixtures = data['response']
         apostar(fixtures, nombre_usuario, dinero_disponible)
     else:
-        print("No se encontraron partidos para la fecha especificada en la primera fase")
+        print("No se encontraron partidos para la fecha especificada en la primera fase.")
