@@ -314,7 +314,3 @@ def comenzar_sistema_apuestas(HEADERS: dict, nombre_usuario: str, dinero_disponi
         apostar(fixtures, nombre_usuario, dinero_disponible)
     else:
         print("No se encontraron partidos para la fecha especificada en la primera fase")
-
-
-
-

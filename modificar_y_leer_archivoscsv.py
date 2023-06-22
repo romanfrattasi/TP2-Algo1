@@ -114,5 +114,3 @@ def usuario_mas_ganador() -> None:
                 diccionario_ganador[usuario[0]]+=1
     usuario_mas_ganador=(sorted(diccionario_ganador.items(),key=lambda x:x[1],reverse=True)[:1])
     print(f"el usuario mas ganador es {usuario_mas_ganador[0][0]} con una tolidad de {usuario_mas_ganador[0][1]} victorias")
-
-
