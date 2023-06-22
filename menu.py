@@ -172,7 +172,10 @@ def main():
             modificar_y_leer_archivoscsv.usuario_mas_ganador()
         elif opcion =='8':
             dinero_disponible = modificar_y_leer_archivoscsv.obtener_dinero_disponible(nombre_usuario)
-            apuestas_e_informacion_deportiva.comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible)
+            if(dinero_disponible != 0):
+                apuestas_e_informacion_deportiva.comenzar_sistema_apuestas(HEADERS, nombre_usuario, dinero_disponible)
+            else:
+                print("No tenes dinero disponible, hace una recarga.")
         opcion = menu(OPCIONES)
         os.system("cls")
 main()
